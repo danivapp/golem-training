@@ -14,13 +14,13 @@ mod_basicDropdownApp_ui <- function(id) {
       inputId = ns("dropdown_menu"),
       label = "Choose wisely",
       choices = list(
-        "Option 1" = "option1",
-        "Option 2" = "option2",
-        "Option 3" = "option3",
-        "Option 4" = "option4"
+        "Chilli Sin Carne" = "vegeterian",
+        "Veggie Risotto" = "vegan",
+        "Steak" = "carnivor",
+        "Ice Cubes" = "on diet"
       )
     ),
-    h3("Selected Value:"),
+    h3("You are:"),
     textOutput(ns("selected_text"))
   )
 }
@@ -37,7 +37,7 @@ mod_basicDropdownApp_server <- function(id){
       if(is.null(input$dropdown_menu)) {
         "Please select an option"
       } else {
-        paste("You selected:", input$dropdown_menu)
+        paste("You are:", input$dropdown_menu)
       }
     })
 
