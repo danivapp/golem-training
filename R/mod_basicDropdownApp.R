@@ -8,7 +8,7 @@
 #'
 #' @importFrom shiny NS tagList
 mod_basicDropdownApp_ui <- function(id) {
-  ns <- NS(id)
+  ns <- NS(id) # namespace System to prevent ID consflicts
   tagList(
     selectInput(
       inputId = ns("dropdown_menu"),
@@ -19,7 +19,9 @@ mod_basicDropdownApp_ui <- function(id) {
         "Option 3" = "option3",
         "Option 4" = "option4"
       )
-    )
+    ),
+    h3("Selected Value:"),
+    textOutput(ns("selected_text"))
   )
 }
 
@@ -29,7 +31,15 @@ mod_basicDropdownApp_ui <- function(id) {
 #' @noRd
 mod_basicDropdownApp_server <- function(id){
   moduleServer(id, function(input, output, session){
-    ns <- session$ns
+
+    # Create reactive output that shows the selected dropdown value
+    output$selected_text <- renderText({
+      if(is.null(input$dropdown_menu)) {
+        "Please select an option"
+      } else {
+        paste("You selected:", input$dropdown_menu)
+      }
+    })
 
   })
 }
