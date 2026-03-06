@@ -1,5 +1,12 @@
 # Modul A: Gleiche Modul wie aus App 1, wobei Dropdown-Menü die Optionen iris, cars und palmerpenguins::penguins hat.
 
+# Check and install if missing
+if (!require(shiny)) install.packages("shiny")
+if (!require(palmerpenguins)) install.packages("palmerpenguins")
+
+library(shiny)
+library(palmerpenguins)
+
 #' dataVisualizationApp UI Function
 #'
 #' @description A shiny Module.
@@ -12,22 +19,50 @@
 modA_dataVisualizationApp_ui <- function(id) {
   ns <- NS(id)
   tagList(
-
+    h3("Dataset Selection"),
+    selectInput(
+      inputId = ns("dataset_menu"),
+      label = "Select a dataset:",
+      choices = c( "iris","cars","penguins"),
+      selected = "iris"),
+    br(),
+    h4("Selected Dataset:"),
+    textOutput(ns("selected_text"))
   )
 }
 
-#' dataVisualizationApp Server Functions
+#' dataVisualizationApp Server Function
 #'
 #' @noRd
 modA_dataVisualizationApp_server <- function(id){
   moduleServer(id, function(input, output, session){
-    ns <- session$ns
 
+    # Create reactive output that shows selected dataset info
+    output$selected_text <- renderText({
+      dataset_info <- list(
+        "iris" = "Iris: Flower measurements (150 observations)",
+        "cars" = "Cars: Speed vs stopping distance (50 observations)",
+        "penguins" = "Penguins: Antarctic penguin data (344 observations)"
+        )
+
+      dataset_info[[input$dataset_menu]]
+    })
+
+    return(reactive({
+      input$dataset_menu
+    }))
   })
 }
 
-## To be copied in the UI
-# mod_dataVisualizationApp_ui("dataVisualizationApp_1")
 
-## To be copied in the server
-# mod_dataVisualizationApp_server("dataVisualizationApp_1")
+# # Simple test app
+# library(golem)
+#
+# ui<- fluidPage(
+#   modA_dataVisualizationApp_ui("test")
+# )
+# server <- function(input, output, session) {
+#   modA_dataVisualizationApp_server("test")
+# }
+# shinyApp(ui, server)
+
