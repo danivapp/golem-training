@@ -1,3 +1,5 @@
+
+
 #' The application User-Interface
 #'
 #' @param request Internal parameter for `{shiny}`.
@@ -10,8 +12,59 @@ app_ui <- function(request) {
     golem_add_external_resources(),
     # Your application UI logic
     fluidPage(
-      titlePanel("Golem App 1 - Text Dropdown"),
-      mod_basicDropdownApp_ui("basicDropdownApp_1")
+      titlePanel("Golem Training"),
+
+      # Create tabs for different apps
+      tabsetPanel(
+
+        # App1: basicDropdownApp
+        tabPanel(
+          title = "App 1: Text Dropdown",
+          value = "app1",
+          br(),
+          mod_basicDropdownApp_ui("basicDropdownApp_1")
+        ),
+
+
+        # App2: dataVisualizationApp
+        tabPanel(
+          title = "App 2: Data Visualization",
+          value = "app2",
+          br(),
+          fluidRow(
+            # Module A (dropdown)
+            column(4,
+                   wellPanel(
+                     h4("Dataset Selection"),
+                     modA_dataVisualizationApp_ui("moduleA")
+                   )
+            ),
+            # Module B (scatterplots)
+                  wellPanel(
+                    h4("Scatter Plot"),
+                    modB_dataVisualizationApp_ui("moduleA")
+            )
+          )
+        ),
+
+        # App3: Placeholder
+        tabPanel(
+          title = "App 3: Data Analysis",
+          value = "app3",
+        ),
+
+        # App4: Placeholder
+        tabPanel(
+          title = "App 4: Dashboard Cards",
+          value = "app4",
+        ),
+
+        # App5: Placeholder
+        tabPanel(
+          title = "App 5: Interactive Dashboard",
+          value = "app5",
+        )
+      )
     )
   )
 }
