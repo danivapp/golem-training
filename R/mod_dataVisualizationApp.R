@@ -1,31 +1,11 @@
-#' dataVisualizationApp UI Function
+#' Data Visualization Modules
 #'
-#' @description A shiny Module.
-#'
-#' @param id,input,output,session Internal parameters for {shiny}.
-#'
-#' @noRd
-#'
-#' @importFrom shiny NS tagList
-mod_dataVisualizationApp_ui <- function(id) {
-  ns <- NS(id)
-  tagList(
-
-  )
-}
-
-#' dataVisualizationApp Server Functions
+#' @description This file serves as a placeholder.
+#' Module A and Module B are defined in their respective dummy apps:
+#' - Module A: modA_dataVisualizationApp.R
+#' - Module B: modB_dataVisualizationApp.R
 #'
 #' @noRd
-mod_dataVisualizationApp_server <- function(id){
-  moduleServer(id, function(input, output, session){
-    ns <- session$ns
 
-  })
-}
-
-## To be copied in the UI
-# mod_dataVisualizationApp_ui("dataVisualizationApp_1")
-
-## To be copied in the server
-# mod_dataVisualizationApp_server("dataVisualizationApp_1")
+# Module functions are defined in the dummy app files
+# This approach allows for independent development and testing
