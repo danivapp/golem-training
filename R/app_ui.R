@@ -54,6 +54,8 @@ app_ui <- function(request) {
         tabPanel(
           title = "App 3: Data Analysis",
           value = "app3",
+          br(),
+          modA_dataAnalysis_ui("dataAnalysisApp")
         ),
 
         # App4: Placeholder

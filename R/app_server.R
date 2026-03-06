@@ -17,6 +17,7 @@ app_server <- function(input, output, session) {
   modB_dataVisualizationApp_server("moduleB", selected_dataset)
 
   # App 3: Data Analysis
+  modA_dataAnalysis_server("dataAnalysisApp")
 
   # App 4: Dashboard Cards
 
