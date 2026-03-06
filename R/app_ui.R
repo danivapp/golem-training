@@ -40,10 +40,13 @@ app_ui <- function(request) {
                    )
             ),
             # Module B (scatterplots)
-                  wellPanel(
-                    h4("Scatter Plot"),
-                    modB_dataVisualizationApp_ui("moduleA")
+            column(8,
+                   wellPanel(
+                     h4("Scatter Plot"),
+                     modB_dataVisualizationApp_ui("moduleB")
+                   )
             )
+
           )
         ),
 
