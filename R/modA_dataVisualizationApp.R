@@ -1,11 +1,5 @@
 # Modul A: Gleiche Modul wie aus App 1, wobei Dropdown-Menü die Optionen iris, cars und palmerpenguins::penguins hat.
 
-# Check and install if missing
-if (!require(shiny)) install.packages("shiny")
-if (!require(palmerpenguins)) install.packages("palmerpenguins")
-
-library(shiny)
-library(palmerpenguins)
 
 #' dataVisualizationApp UI Function
 #'
