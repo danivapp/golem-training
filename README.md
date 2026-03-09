@@ -1,5 +1,5 @@
 # Create the README.md file in your project root
-cat('
+
 # 🚀 Golem Training Apps
 
 **[👉 View Live App](https://daniva.shinyapps.io/golem-training-apps)**
