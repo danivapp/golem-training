@@ -88,7 +88,7 @@ app_ui <- function(request) {
           )
         ),
 
-        # App5: Placeholder
+        # App5: interactiveDashboardApp
         tabPanel(
           title = "App 5: Interactive Dashboard",
           value = "app5",
