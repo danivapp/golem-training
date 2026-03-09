@@ -69,10 +69,23 @@ app_ui <- function(request) {
           )
         ),
 
-        # App4: Placeholder
+        # App4: dashboardCardsApps
         tabPanel(
           title = "App 4: Dashboard Cards",
           value = "app4",
+          br(),
+          fluidRow(
+
+            # Left column: Module A (Gesamtzufriedenheit)
+            column(6,
+                   modA_dashboardCardsApp_ui("dashboardA")
+            ),
+
+            # Right column: Module B (NPS)
+            column(6,
+                   modB_dashboardCardsApp_ui("dashboardB")
+            )
+          )
         ),
 
         # App5: Placeholder
