@@ -7,7 +7,7 @@
 load_app_dependencies <- function() {
 
   # Required packages
-  packages <- c("ggplot2", "palmerpenguins", "shiny", "golem", "ggplot2", "bslib", "reactable", "shinyjs")
+  packages <- c("ggplot2", "palmerpenguins", "shiny", "golem", "ggplot2", "bslib", "reactable")
 
   # Check and load each package
   for(pkg in packages) {

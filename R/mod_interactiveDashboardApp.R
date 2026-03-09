@@ -106,29 +106,29 @@ modA_interactiveDashboardApp_server <- function(id){
 }
 
 
-## Test Module B independently
-library(golem)
-library(shiny)
-library(bslib)
-library(reactable)
-
-ui <- page_fluid(
-  theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
-  titlePanel("Test: Module A - Gesamtzufriedenheit"),
-  br(),
-
-  # Test Module A in a container
-  div(
-    style = "max-width: 500px; margin: 0 auto;",
-    modA_interactiveDashboardApp_ui("testA")
-  )
-)
-
-server <- function(input, output, session) {
-  modA_interactiveDashboardApp_server("testA")
-}
-
-shinyApp(ui, server)
+# ## Test Module B independently
+# library(golem)
+# library(shiny)
+# library(bslib)
+# library(reactable)
+#
+# ui <- page_fluid(
+#   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
+#   titlePanel("Test: Module A - Gesamtzufriedenheit"),
+#   br(),
+#
+#   # Test Module A in a container
+#   div(
+#     style = "max-width: 500px; margin: 0 auto;",
+#     modA_interactiveDashboardApp_ui("testA")
+#   )
+# )
+#
+# server <- function(input, output, session) {
+#   modA_interactiveDashboardApp_server("testA")
+# }
+#
+# shinyApp(ui, server)
 
 
 
@@ -143,16 +143,7 @@ modB_interactiveDashboardApp_ui <- function(id) {
   # Using my_card function here too
   my_card(
     header_name = "NPS",
-
-    # Waiting message (shown initially)
-    div(id = ns("waiting_message"),
-        style = "text-align: center; padding: 50px; color: #666;"
-        ),
-
-    # Table container (hidden initially)
-    div(id = ns("table_container"),
-        style = "display: none;",
-        reactable::reactableOutput(ns("nps_table")))
+    uiOutput(ns("content"))  # Single dynamic content area
   )
 }
 
@@ -162,6 +153,13 @@ modB_interactiveDashboardApp_server <- function(id, module_states) {
 
     ns <- session$ns
 
+    # DEBUG: Check what module_states contains
+    observe({
+      cat("=== MODULE B DEBUG ===\n")
+      cat("Button clicked:", module_states$button_clicked(), "\n")
+      cat("Refresh count:", module_states$refresh_count(), "\n")
+    })
+
     # Different fake NPS data
     nps_data <- reactive({
       data.frame(
@@ -170,11 +168,16 @@ modB_interactiveDashboardApp_server <- function(id, module_states) {
       )
     })
 
-    # Show/hide table based on button click
-    observe({
+    # Simple conditional rendering - no runjs needed
+    output$content <- renderUI({
       if(module_states$button_clicked()) {
-        runjs(paste0("document.getElementById('", ns("waiting_message"), "').style.display = 'none';"))
-        runjs(paste0("document.getElementById('", ns("table_container"), "').style.display = 'block';"))
+        # Show table
+        reactable::reactableOutput(ns("nps_table"))
+      } else {
+        # Show waiting message
+        div(
+          style = "text-align: center; padding: 50px; color: #666;"
+        )
       }
     })
 
@@ -200,32 +203,32 @@ modB_interactiveDashboardApp_server <- function(id, module_states) {
   })
 }
 
-# Test Module B independently
-
-library(shinyjs)
-
-ui <- page_fluid(
-  theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
-  titlePanel("Test: Module B - NPS"),
-  br(),
-
-  # Test Module B in a container
-  div(
-    style = "max-width: 500px; margin: 0 auto;",
-    modB_interactiveDashboardApp_ui("testB")
-  )
-)
-
-server <- function(input, output, session) {
-
-  # SIMULATE module_states for testing
-  simulated_states <- list(
-    button_clicked = reactiveVal(TRUE),  # Simulate button was clicked
-    refresh_count = reactiveVal(1)
-  )
-
-  modB_interactiveDashboardApp_server("testB", simulated_states)
-}
-
-shinyApp(ui, server)
+# # Test Module B independently
+#
+# library(shinyjs)
+#
+# ui <- page_fluid(
+#   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
+#   titlePanel("Test: Module B - NPS"),
+#   br(),
+#
+#   # Test Module B in a container
+#   div(
+#     style = "max-width: 500px; margin: 0 auto;",
+#     modB_interactiveDashboardApp_ui("testB")
+#   )
+# )
+#
+# server <- function(input, output, session) {
+#
+#   # SIMULATE module_states for testing
+#   simulated_states <- list(
+#     button_clicked = reactiveVal(TRUE),  # Simulate button was clicked
+#     refresh_count = reactiveVal(1)
+#   )
+#
+#   modB_interactiveDashboardApp_server("testB", simulated_states)
+# }
+#
+# shinyApp(ui, server)
 
