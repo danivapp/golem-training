@@ -13,8 +13,8 @@ app_server <- function(input, output, session) {
   mod_basicDropdownApp_server("basicDropdownApp_1")
 
   # App 2: Data visualization modules
-  selected_dataset <- modA_dataVisualizationApp_server("moduleA")
-  modB_dataVisualizationApp_server("moduleB", selected_dataset)
+  selected_dataset_app2 <- modA_dataVisualizationApp_server("moduleA")
+  modB_dataVisualizationApp_server("moduleB", selected_dataset_app2)
 
   # App 3: Data Analysis
   selected_dataset_app3 <- modA_dataAnalysisApp_server("barChartApp")
