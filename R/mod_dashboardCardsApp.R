@@ -98,7 +98,7 @@ modA_dashboardCardsApp_server <- function(id){
 }
 
 
-# # # Simple test app
+## Test Module B independently
 # library(golem)
 # library(shiny)
 # library(bslib)
@@ -128,5 +128,64 @@ modA_dashboardCardsApp_server <- function(id){
 ## Module B
 ##############
 
+#' Module B: NPS UI Function
+modB_dashboardCards_ui <- function(id) {
+  ns <- NS(id)
 
+  # Using my_card function here too
+  my_card(
+    header_name = "NPS",
+    reactable::reactableOutput(ns("nps_table"))
+  )
+}
+
+#' Module B: NPS Server Function
+modB_dashboardCards_server <- function(id) {
+  moduleServer(id, function(input, output, session) {
+
+    # Different fake NPS data
+    nps_data <- reactive({
+      data.frame(
+        Segment = c("Promoters", "Passives", "Detractors"),
+        Anteil = c(65, 25, 10)
+      )
+    })
+
+    # Render table
+    output$nps_table <- reactable::renderReactable({
+      reactable::reactable(
+        nps_data(),
+        columns = list(
+          Segment = reactable::colDef(name = "Segment", width = 120),
+          Anteil = reactable::colDef(name = "Anteil (%)", width = 120,
+                                     format = reactable::colFormat(suffix = "%"))
+        ),
+        striped = TRUE,
+        highlight = TRUE,
+        borderless = TRUE,
+        compact = TRUE
+      )
+    })
+  })
+}
+
+# # Test Module B independently
+#
+# ui <- page_fluid(
+#   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
+#   titlePanel("Test: Module B - NPS"),
+#   br(),
+#
+#   # Test Module B in a container
+#   div(
+#     style = "max-width: 500px; margin: 0 auto;",
+#     modB_dashboardCards_ui("testB")
+#   )
+# )
+#
+# server <- function(input, output, session) {
+#   modB_dashboardCards_server("testB")
+# }
+#
+# shinyApp(ui, server)
 
