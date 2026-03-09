@@ -92,6 +92,9 @@ app_ui <- function(request) {
         tabPanel(
           title = "App 5: Interactive Dashboard",
           value = "app5",
+          br(),
+          column(6, modA_interactiveDashboardApp_ui("app5_moduleA")),
+          column(6, modB_interactiveDashboardApp_ui("app5_moduleB"))
         )
       )
     )

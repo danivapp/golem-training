@@ -25,5 +25,7 @@ app_server <- function(input, output, session) {
   modB_dashboardCardsApp_server("dashboardB")
 
   # App 5: Interactive Dashboard
+  module_states_app5 <- modA_interactiveDashboardApp_server("app5_moduleA")
+  modB_interactiveDashboardApp_server("app5_moduleB", module_states_app5)
 
 }
