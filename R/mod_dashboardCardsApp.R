@@ -169,23 +169,23 @@ modB_dashboardCardsApp_server <- function(id) {
   })
 }
 
-# Test Module B independently
-
-ui <- page_fluid(
-  theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
-  titlePanel("Test: Module B - NPS"),
-  br(),
-
-  # Test Module B in a container
-  div(
-    style = "max-width: 500px; margin: 0 auto;",
-    modB_dashboardCardsApp_ui("testB")
-  )
-)
-
-server <- function(input, output, session) {
-  modB_dashboardCardsApp_server("testB")
-}
-
-shinyApp(ui, server)
+# # Test Module B independently
+#
+# ui <- page_fluid(
+#   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
+#   titlePanel("Test: Module B - NPS"),
+#   br(),
+#
+#   # Test Module B in a container
+#   div(
+#     style = "max-width: 500px; margin: 0 auto;",
+#     modB_dashboardCardsApp_ui("testB")
+#   )
+# )
+#
+# server <- function(input, output, session) {
+#   modB_dashboardCardsApp_server("testB")
+# }
+#
+# shinyApp(ui, server)
 
