@@ -10,7 +10,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-modA_dataAnalysis_ui <- function(id) {
+modA_dataAnalysisApp_ui <- function(id) {
   ns <- NS(id) # namespace System to prevent ID conflicts
   tagList(
     h3("Dataset Selection"),
@@ -58,7 +58,7 @@ modA_dataAnalysis_ui <- function(id) {
 #' dataAnalysis Server Functions
 #'
 #' @noRd
-modA_dataAnalysis_server <- function(id){
+modA_dataAnalysisApp_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 

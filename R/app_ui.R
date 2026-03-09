@@ -50,12 +50,23 @@ app_ui <- function(request) {
           )
         ),
 
-        # App3: Placeholder
+        # App3: dataAnalysisApp
         tabPanel(
           title = "App 3: Data Analysis",
           value = "app3",
           br(),
-          modA_dataAnalysis_ui("dataAnalysisApp")
+          fluidRow(
+            # Left half: Module A (bar chart)
+            column(6,
+                   modA_dataAnalysisApp_ui("barChartApp")
+            ),
+            # Right half: Module B (data table)
+            column(6,
+                   wellPanel(
+                     modB_dataAnalysisApp_ui("dataAnalysisApp")
+                   )
+            )
+          )
         ),
 
         # App4: Placeholder
