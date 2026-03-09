@@ -13,19 +13,6 @@
 modA_dataAnalysisApp_ui <- function(id) {
   ns <- NS(id) # namespace System to prevent ID conflicts
   tagList(
-    h3("Dataset Selection"),
-    selectInput(
-      inputId = ns("dataset_menu"),
-      label = "Select a dataset:",
-      choices = c( "iris","cars","penguins"),
-      selected = "iris"),
-    br(),
-    h4("Selected Dataset:"),
-    textOutput(ns("dataset_info")),
-    # br(),
-    # h4("📈 Bar Chart:"),
-    # plotOutput(ns("bar_chart"), height = "400px")
-
     fluidRow(
 
       # Left Column
