@@ -64,9 +64,10 @@ modA_interactiveDashboardApp_server <- function(id){
 
     # Fake satisfaction data
     satisfaction_data <- reactive({
+      set.seed(as.numeric(Sys.time()) + refresh_count())
       data.frame(
         Kategorie = c("Service", "Qualität", "Preis"),
-        Bewertung = c(4.2, 4.5, 3.8)
+        Bewertung = round(runif(3, min = 1.0, max = 5.0), 1)
       )
     })
 
@@ -153,18 +154,28 @@ modB_interactiveDashboardApp_server <- function(id, module_states) {
 
     ns <- session$ns
 
-    # DEBUG: Check what module_states contains
-    observe({
-      cat("=== MODULE B DEBUG ===\n")
-      cat("Button clicked:", module_states$button_clicked(), "\n")
-      cat("Refresh count:", module_states$refresh_count(), "\n")
-    })
+    # # DEBUG: Check what module_states contains
+    # observe({
+    #   cat("=== MODULE B DEBUG ===\n")
+    #   cat("Button clicked:", module_states$button_clicked(), "\n")
+    #   cat("Refresh count:", module_states$refresh_count(), "\n")
+    # })
 
     # Different fake NPS data
     nps_data <- reactive({
+      # This makes it reactive to refresh_count changes from Module A
+      module_states$refresh_count()
+
+      # Generate new random percentages that sum to 100
+      set.seed(as.numeric(Sys.time()) + module_states$refresh_count() + 42)
+
+      promoters <- sample(40:75, 1)
+      detractors <- sample(5:25, 1)
+      passives <- 100 - promoters - detractors
+
       data.frame(
         Segment = c("Promoters", "Passives", "Detractors"),
-        Anteil = c(65, 25, 10)
+        Anteil = c(promoters, passives, detractors)
       )
     })
 
