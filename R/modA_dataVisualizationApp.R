@@ -13,7 +13,6 @@
 modA_dataVisualizationApp_ui <- function(id) {
   ns <- NS(id)
   tagList(
-    h3("Dataset Selection"),
     selectInput(
       inputId = ns("dataset_menu"),
       label = "Select a dataset:",
