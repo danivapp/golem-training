@@ -35,14 +35,12 @@ app_ui <- function(request) {
             # Module A (dropdown)
             column(4,
                    wellPanel(
-                     h4("Dataset Selection"),
                      modA_dataVisualizationApp_ui("moduleA")
                    )
             ),
             # Module B (scatterplots)
             column(8,
                    wellPanel(
-                     h4("Scatter Plot"),
                      modB_dataVisualizationApp_ui("moduleB")
                    )
             )

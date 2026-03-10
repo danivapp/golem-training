@@ -18,7 +18,6 @@ modA_dataAnalysisApp_ui <- function(id) {
       # Left Column
       column(4,
              wellPanel(
-               h3("Dataset Selection"),
                selectInput(
                  inputId = ns("dataset_menu"),
                  label = "Select a dataset:",
@@ -34,7 +33,7 @@ modA_dataAnalysisApp_ui <- function(id) {
       # Right Column
       column(8,
              wellPanel(
-               h4("📈 Bar Chart"),
+               h4("Bar Chart"),
                plotOutput(ns("bar_chart"), height = "400px")
              ))
     )
