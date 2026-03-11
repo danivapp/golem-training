@@ -8,11 +8,11 @@
 #'
 #' @importFrom shiny NS tagList
 mod_basicDropdownApp_ui <- function(id) {
-  ns <- NS(id) # namespace System to prevent ID consflicts
+  ns <- NS(id) # namespace System to prevent ID conflicts
   tagList(
     selectInput(
-      inputId = ns("dropdown_menu"),
-      label = "Choose wisely",
+      ns("dropdown_menu"),
+      "Choose wisely",
       choices = list(
         "Chilli Sin Carne" = "vegeterian",
         "Veggie Risotto" = "vegan",
@@ -32,15 +32,9 @@ mod_basicDropdownApp_ui <- function(id) {
 mod_basicDropdownApp_server <- function(id){
   moduleServer(id, function(input, output, session){
 
-    # Create reactive output that shows the selected dropdown value
     output$selected_text <- renderText({
-      if(is.null(input$dropdown_menu)) {
-        "Please select an option"
-      } else {
-        paste("You are:", input$dropdown_menu)
-      }
+      generate_food_text(input$dropdown_menu)
     })
-
   })
 }
 
@@ -49,3 +43,23 @@ mod_basicDropdownApp_server <- function(id){
 
 ## To be copied in the server
 # mod_basicDropdownApp_server("basicDropdownApp_1")
+
+
+# Dummy App
+library(shiny)
+
+ui <- bslib::page_fluid(
+  mod_basicDropdownApp_ui("basicDropdownApp_1")
+)
+
+server <- function(input, output, session){
+  mod_basicDropdownApp_server("basicDropdownApp_1")
+}
+
+shinyApp(ui, server)
+
+
+
+
+
+
