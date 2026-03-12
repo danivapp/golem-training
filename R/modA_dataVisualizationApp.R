@@ -12,15 +12,21 @@
 #' @importFrom shiny NS tagList
 modA_dataVisualizationApp_ui <- function(id) {
   ns <- NS(id)
-  tagList(
-    selectInput(
-      inputId = ns("dataset_menu"),
-      label = "Select a dataset:",
-      choices = c( "iris","cars","penguins"),
-      selected = "iris"),
-    br(),
-    h4("Selected Dataset:"),
-    textOutput(ns("selected_text"))
+  div(
+    class = "container-fluid",
+    div(
+      class= "row mb-3",
+      selectInput(
+        ns("dataset_menu"),
+        "Select a dataset:",
+        choices = c( "iris","cars","penguins"),
+        selected = "iris")
+    ),
+    div(
+      class = "col-12",
+      h5("Selection Info:"),
+      textOutput(ns("selected_text"))
+    )
   )
 }
 
@@ -32,15 +38,10 @@ modA_dataVisualizationApp_server <- function(id){
 
     # Create reactive output that shows selected dataset info
     output$selected_text <- renderText({
-      dataset_info <- list(
-        "iris" = "Iris: Flower measurements (150 observations)",
-        "cars" = "Cars: Speed vs stopping distance (50 observations)",
-        "penguins" = "Penguins: Antarctic penguin data (344 observations)"
-        )
-
-      dataset_info[[input$dataset_menu]]
+      generate_data_text(input$dataset_menu)
     })
 
+    # return, as this will be used in module B of the app.
     return(reactive({
       input$dataset_menu
     }))
@@ -48,7 +49,7 @@ modA_dataVisualizationApp_server <- function(id){
 }
 
 
-# # Simple test app
+# # Dummy App
 # library(golem)
 #
 # ui<- fluidPage(
@@ -58,4 +59,3 @@ modA_dataVisualizationApp_server <- function(id){
 #   modA_dataVisualizationApp_server("test")
 # }
 # shinyApp(ui, server)
-
