@@ -49,7 +49,7 @@ modA_dataVisualizationApp_server <- function(id){
 }
 
 
-# # Dummy App
+# # Dummy App Module A
 # library(golem)
 #
 # ui<- fluidPage(

@@ -25,6 +25,8 @@ modB_dataVisualizationApp_ui <- function(id) {
 modB_dataVisualizationApp_server <- function(id, selected_dataset) {
   moduleServer(id, function(input, output, session) {
 
+    library(ggplot2)
+
     # Get current dataset based on Module A selection
     current_data <- reactive({req(selected_dataset())
 
@@ -43,42 +45,38 @@ modB_dataVisualizationApp_server <- function(id, selected_dataset) {
 
       if(dataset_name == "iris") {
         # Iris: Sepal Length vs Sepal Width
-        plot(data$Sepal.Length, data$Sepal.Width,
-             main = "Iris: Sepal Length vs Sepal Width",
-             xlab = "Sepal Length (cm)",
-             ylab = "Sepal Width (cm)",
-             col = as.factor(data$Species),
-             pch = 19, cex = 1.5)
-        legend("topright",
-               legend = levels(as.factor(data$Species)),
-               col = 1:3, pch = 19,
-               title = "Species")
+        ggplot(data, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+          geom_point(size = 3, alpha = 0.7) +
+          labs(title = "Iris: Sepal Length vs Sepal Width",
+               x = "Sepal Length (cm)",
+               y = "Sepal Width (cm)",
+               color = "Species") +
+          theme_minimal() +
+          theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+          scale_color_viridis_d()
 
       } else if(dataset_name == "cars") {
         # Cars: Speed vs Distance
-        plot(data$speed, data$dist,
-             main = "Cars: Speed vs Stopping Distance",
-             xlab = "Speed (mph)",
-             ylab = "Stopping Distance (ft)",
-             col = "blue", pch = 19, cex = 1.5)
-        # Add trend line
-        abline(lm(dist ~ speed, data = data), col = "red", lwd = 2)
+        ggplot(data, aes(x = speed, y = dist)) +
+          geom_point(color = "blue", size = 3, alpha = 0.7) +
+          geom_smooth(method = "lm", color = "red", se = TRUE, linewidth = 1.2) +
+          labs(title = "Cars: Speed vs Stopping Distance",
+               x = "Speed (mph)",
+               y = "Stopping Distance (ft)") +
+          theme_minimal() +
+          theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold"))
 
       } else if(dataset_name == "penguins") {
         # Penguins: Bill Length vs Bill Depth
-        # Remove rows with missing values
-        data_clean <- data[complete.cases(data$bill_length_mm, data$bill_depth_mm), ]
-
-        plot(data_clean$bill_length_mm, data_clean$bill_depth_mm,
-             main = "Penguins: Bill Length vs Bill Depth",
-             xlab = "Bill Length (mm)",
-             ylab = "Bill Depth (mm)",
-             col = as.factor(data_clean$species),
-             pch = 19, cex = 1.5)
-        legend("topright",
-               legend = levels(as.factor(data_clean$species)),
-               col = 1:3, pch = 19,
-               title = "Species")
+        ggplot(data, aes(x = bill_length_mm, y = bill_depth_mm, color = species)) +
+          geom_point(size = 3, alpha = 0.7, na.rm = TRUE) +
+          labs(title = "Penguins: Bill Length vs Bill Depth",
+               x = "Bill Length (mm)",
+               y = "Bill Depth (mm)",
+               color = "Species") +
+          theme_minimal() +
+          theme(plot.title = element_text(hjust = 0.5, size = 14, face = "bold")) +
+          scale_color_viridis_d()
       }
     })
 
@@ -95,15 +93,15 @@ modB_dataVisualizationApp_server <- function(id, selected_dataset) {
   })
 }
 
-# # Simple test app
-# library(golem)
-#
-# ui<- fluidPage(
-#   modB_dataVisualizationApp_ui("test")
-# )
-#
-# server <- function(input, output, session) {
-#   modB_dataVisualizationApp_server("test", selected_dataset = reactive("penguins"))
-# }
-#
-# shinyApp(ui, server)
+# Dummy App Module B
+library(golem)
+
+ui<- fluidPage(
+  modB_dataVisualizationApp_ui("test")
+)
+
+server <- function(input, output, session) {
+  modB_dataVisualizationApp_server("test", selected_dataset = reactive("iris"))
+}
+
+shinyApp(ui, server)
