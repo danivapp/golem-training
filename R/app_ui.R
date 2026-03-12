@@ -5,94 +5,96 @@
 #' @param request Internal parameter for `{shiny}`.
 #'     DO NOT REMOVE.
 #' @import shiny
+#' @import bslib
 #' @noRd
 app_ui <- function(request) {
+  library(bslib)
+
   tagList(
     # Leave this function for adding external resources
     # golem_add_external_resources(),
     # Your application UI logic
-    fluidPage(
-      titlePanel("Golem Training"),
+    page_navbar(
+      title = "Golem Training",
 
-      # Create tabs for different apps
-      tabsetPanel(
-
-        # App1: basicDropdownApp
-        tabPanel(
-          title = "App 1: Text Dropdown",
-          value = "app1",
-          br(),
+      # App1: basicDropdownApp
+      nav_panel(
+        title = "App 1: Text Dropdown",
+        value = "app1",
+        div(
+          class = "mt-3",
           mod_basicDropdownApp_ui("basicDropdownApp_1")
-        ),
+        )
+      ),
 
-
-        # App2: dataVisualizationApp
-        tabPanel(
-          title = "App 2: Data Visualization",
-          value = "app2",
-          br(),
-          fluidRow(
-            # Module A (dropdown)
-            column(4,
-                   wellPanel(
-                     modA_dataVisualizationApp_ui("moduleA")
-                   )
+      # App2: dataVisualizationApp
+      nav_panel(
+        title = "App 2: Data Visualization",
+        value = "app2",
+        div(
+          class = "mt-3",
+          layout_column_wrap(
+            width = 1/2,
+            card(
+              card_header("Dataset Selection"),
+              card_body(
+                modA_dataVisualizationApp_ui("moduleA")
+              )
             ),
-            # Module B (scatterplots)
-            column(8,
-                   wellPanel(
-                     modB_dataVisualizationApp_ui("moduleB")
-                   )
-            )
-
-          )
-        ),
-
-        # App3: dataAnalysisApp
-        tabPanel(
-          title = "App 3: Data Analysis",
-          value = "app3",
-          br(),
-          fluidRow(
-            # Left half: Module A (bar chart)
-            column(6,
-                   modA_dataAnalysisApp_ui("barChartApp")
-            ),
-            # Right half: Module B (data table)
-            column(6,
-                   wellPanel(
-                     modB_dataAnalysisApp_ui("dataAnalysisApp")
-                   )
+            card(
+              card_header("Visualization"),
+              card_body(
+                modB_dataVisualizationApp_ui("moduleB")
+              )
             )
           )
-        ),
+        )
+      ),
 
-        # App4: dashboardCardsApps
-        tabPanel(
-          title = "App 4: Dashboard Cards",
-          value = "app4",
-          br(),
-          fluidRow(
-
-            # Left column: Module A (Gesamtzufriedenheit)
-            column(6,
-                   modA_dashboardCardsApp_ui("dashboardA")
-            ),
-
-            # Right column: Module B (NPS)
-            column(6,
-                   modB_dashboardCardsApp_ui("dashboardB")
+      # App3: dataAnalysisApp
+      nav_panel(
+        title = "App 3: Data Analysis",
+        value = "app3",
+        div(
+          class = "mt-3",
+          layout_column_wrap(
+            width = 1/2,
+            modA_dataAnalysisApp_ui("barChartApp"),
+            card(
+              card_header("Data Analysis"),
+              card_body(
+                modB_dataAnalysisApp_ui("dataAnalysisApp")
+              )
             )
           )
-        ),
+        )
+      ),
 
-        # App5: interactiveDashboardApp
-        tabPanel(
-          title = "App 5: Interactive Dashboard",
-          value = "app5",
-          br(),
-          column(6, modA_interactiveDashboardApp_ui("app5_moduleA")),
-          column(6, modB_interactiveDashboardApp_ui("app5_moduleB"))
+      # App4: dashboardCardsApps
+      nav_panel(
+        title = "App 4: Dashboard Cards",
+        value = "app4",
+        div(
+          class = "mt-3",
+          layout_column_wrap(
+            width = 1/2,
+            modA_dashboardCardsApp_ui("dashboardA"),
+            modB_dashboardCardsApp_ui("dashboardB")
+          )
+        )
+      ),
+
+      # App5: interactiveDashboardApp
+      nav_panel(
+        title = "App 5: Interactive Dashboard",
+        value = "app5",
+        div(
+          class = "mt-3",
+          layout_column_wrap(
+            width = 1/2,
+            modA_interactiveDashboardApp_ui("app5_moduleA"),
+            modB_interactiveDashboardApp_ui("app5_moduleB")
+          )
         )
       )
     )
