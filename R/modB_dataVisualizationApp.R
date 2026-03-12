@@ -33,7 +33,8 @@ modB_dataVisualizationApp_server <- function(id, selected_dataset) {
       switch(selected_dataset(),
              "iris" = iris,
              "cars" = cars,
-             "penguins" = palmerpenguins::penguins)
+             "penguins" = palmerpenguins::penguins
+             )
     })
 
     # Create scatter plot
@@ -93,15 +94,15 @@ modB_dataVisualizationApp_server <- function(id, selected_dataset) {
   })
 }
 
-# Dummy App Module B
-library(golem)
-
-ui<- fluidPage(
-  modB_dataVisualizationApp_ui("test")
-)
-
-server <- function(input, output, session) {
-  modB_dataVisualizationApp_server("test", selected_dataset = reactive("iris"))
-}
-
-shinyApp(ui, server)
+# # Dummy App Module B
+# library(golem)
+#
+# ui<- bslib::page_fluid(
+#   modB_dataVisualizationApp_ui("test")
+# )
+#
+# server <- function(input, output, session) {
+#   modB_dataVisualizationApp_server("test", selected_dataset = reactive("iris"))
+# }
+#
+# shinyApp(ui, server)

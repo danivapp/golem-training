@@ -52,10 +52,12 @@ modA_dataVisualizationApp_server <- function(id){
 # # Dummy App Module A
 # library(golem)
 #
-# ui<- fluidPage(
+# ui<- bslib::page_fluid(
 #   modA_dataVisualizationApp_ui("test")
 # )
+#
 # server <- function(input, output, session) {
 #   modA_dataVisualizationApp_server("test")
 # }
+#
 # shinyApp(ui, server)

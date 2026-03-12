@@ -14,7 +14,6 @@ modA_dataAnalysisApp_ui <- function(id) {
   ns <- NS(id) # namespace System to prevent ID conflicts
   tagList(
     fluidRow(
-
       # Left Column
       column(4,
              wellPanel(
