@@ -65,33 +65,43 @@ app_ui <- function(request) {
         )
       ),
 
-      # # App4: dashboardCardsApps
-      # nav_panel(
-      #   title = "App 4: Dashboard Cards",
-      #   value = "app4",
-      #   div(
-      #     class = "mt-3",
-      #     layout_column_wrap(
-      #       width = 1/2,
-      #       modA_dashboardCardsApp_ui("dashboardA"),
-      #       modB_dashboardCardsApp_ui("dashboardB")
-      #     )
-      #   )
-      # ),
-      #
-      # # App5: interactiveDashboardApp
-      # nav_panel(
-      #   title = "App 5: Interactive Dashboard",
-      #   value = "app5",
-      #   div(
-      #     class = "mt-3",
-      #     layout_column_wrap(
-      #       width = 1/2,
-      #       modA_interactiveDashboardApp_ui("app5_moduleA"),
-      #       modB_interactiveDashboardApp_ui("app5_moduleB")
-      #     )
-      #   )
-      # )
+      # App4: dashboardCardsApps
+      nav_panel(
+        title = "App 4: Dashboard Cards",
+        value = "app4",
+        div(
+          class = "mt-3",
+          div(
+            class = "mb-3 text-center",
+            actionButton("refresh_dashboard", "Daten aktualisieren",
+                         class = "btn-primary btn-lg")
+          ),
+          layout_column_wrap(
+            width = 1/2,
+            modA_dashboardCardsApp_ui("dashboardA"),
+            modB_dashboardCardsApp_ui("dashboardB")
+          )
+        )
+      ),
+
+      # App5: interactiveDashboardApp
+      nav_panel(
+        title = "App 5: Interactive Dashboard",
+        value = "app5",
+        div(
+          class = "mt-3",
+          div(
+            class = "mb-3 text-center",
+            actionButton("refresh_interactive", "Daten aktualisieren",
+                         class = "btn-primary btn-lg")
+          ),
+          layout_column_wrap(
+            width = 1/2,
+            modA_dashboardCardsApp_ui("app5_moduleA"),
+            modB_dashboardCardsApp_ui("app5_moduleB")
+          )
+        )
+      )
     )
   )
 }

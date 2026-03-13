@@ -11,76 +11,50 @@
 
 # Modul A und B verwenden unterschiedliche Fake-Daten
 
-
-# Helper Function: Create Bootstrap Card ------------------------------------
-
-#' Create a Bootstrap Card with Header
-#'
-#' @description Creates a bslib card with a custom header and flexible body content
-#' @param header_name Character string for the card title
-#' @param ... Additional content to be placed in the card body
-#' @return A bslib card object
-
-my_card <- function(header_name, ...) {
-  bslib::card(
-    bslib::card_header(
-      class = "bg-primary text-white",
-      header_name
-    ),
-    bslib::card_body(
-      ...
-    )
-  )
-}
-
 ##############
 ## Module A
 ##############
 #' dashboardCardsApp UI Function
 #'
 #' @description A shiny Module.
-#'
 #' @param id,input,output,session Internal parameters for {shiny}.
-#'
+
 #' @noRd
-#'
-#' @importFrom shiny NS tagList
+#' @import bslib
+#' @import shiny
+#' @importFrom reactable reactableOutput
 modA_dashboardCardsApp_ui <- function(id) {
   ns <- NS(id)
 
-  # Using my_card function here
-  my_card(
-    header_name = "Gesamtzufriedenheit",
-    reactable::reactableOutput(ns("satisfaction_table")),
-    br(),
-    actionButton(ns("refresh_btn"), "Daten aktualisieren",
-                 class = "btn-primary")
+  card(
+    card_header(
+      class = "bg-primary text-white",
+      "Gesamtzufriedenheit"
+    ),
+    card_body(
+      reactableOutput(ns("satisfaction_table"))
+    )
   )
-
 }
 
 #' dashboardCardsApp Server Function
-#'
 #' @noRd
-modA_dashboardCardsApp_server <- function(id){
+#' @param shared_satisfaction_data Reactive containing satisfaction data
+#' @import shiny
+#' @import reactable
+modA_dashboardCardsApp_server <- function(id, shared_satisfaction_data){
   moduleServer(id, function(input, output, session){
 
-    # Fake satisfaction data
-    satisfaction_data <- reactive({
-      data.frame(
-        Kategorie = c("Service", "Qualität", "Preis"),
-        Bewertung = c(4.2, 4.5, 3.8)
-      )
-    })
-
     # Render table
-    output$satisfaction_table <- reactable::renderReactable({
-      reactable::reactable(
-        satisfaction_data(),
+    output$satisfaction_table <- renderReactable({
+      req(shared_satisfaction_data())
+
+      reactable(
+        shared_satisfaction_data(),
         columns = list(
-          Kategorie = reactable::colDef(name = "Kategorie", width = 120),
-          Bewertung = reactable::colDef(name = "Bewertung", width = 120,
-                                        format = reactable::colFormat(digits = 1))
+          Kategorie = colDef(name = "Kategorie", width = 120),
+          Bewertung = colDef(name = "Bewertung", width = 120,
+                             format = colFormat(digits = 1))
         ),
         striped = TRUE,
         highlight = TRUE,
@@ -88,21 +62,11 @@ modA_dashboardCardsApp_server <- function(id){
         compact = TRUE
       )
     })
-
-    # Button (no function as specified)
-    observeEvent(input$refresh_btn, {
-      showNotification("Button geklickt! (Keine Funktion)", type = "message")
-    })
-
   })
 }
 
 
-## Test Module A independently
-# library(golem)
-# library(shiny)
-# library(bslib)
-# library(reactable)
+# # dummy app - Module A
 #
 # ui <- page_fluid(
 #   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
@@ -117,7 +81,15 @@ modA_dashboardCardsApp_server <- function(id){
 # )
 #
 # server <- function(input, output, session) {
-#   modA_dashboardCardsApp_server("testA")
+#   # Simulate shared satisfaction data
+#   shared_satisfaction_data <- reactive({
+#     data.frame(
+#       Kategorie = c("Service", "Qualität", "Preis"),
+#       Bewertung = c(4.2, 4.5, 3.8)
+#     )
+#   })
+#
+#   modA_dashboardCardsApp_server("testA", shared_satisfaction_data)
 # }
 #
 # shinyApp(ui, server)
@@ -129,36 +101,42 @@ modA_dashboardCardsApp_server <- function(id){
 ##############
 
 #' Module B: NPS UI Function
+#' @noRd
+#' @import bslib
+#' @import shiny
+#' @importFrom reactable reactableOutput
 modB_dashboardCardsApp_ui <- function(id) {
   ns <- NS(id)
 
-  # Using my_card function here too
-  my_card(
-    header_name = "NPS",
-    reactable::reactableOutput(ns("nps_table"))
+  card(
+    card_header(
+      class = "bg-primary text-white",
+      "NPS"
+    ),
+    card_body(
+      reactableOutput(ns("nps_table"))
+    )
   )
 }
 
 #' Module B: NPS Server Function
-modB_dashboardCardsApp_server <- function(id) {
+#' @param shared_nps_data Reactive containing NPS data
+#' @noRd
+#' @import shiny
+#' @importFrom reactable renderReactable reactable colDef colFormat
+modB_dashboardCardsApp_server <- function(id, shared_nps_data) {
   moduleServer(id, function(input, output, session) {
 
-    # Different fake NPS data
-    nps_data <- reactive({
-      data.frame(
-        Segment = c("Promoters", "Passives", "Detractors"),
-        Anteil = c(65, 25, 10)
-      )
-    })
+    # Render table using shared data
+    output$nps_table <- renderReactable({
+      req(shared_nps_data())
 
-    # Render table
-    output$nps_table <- reactable::renderReactable({
-      reactable::reactable(
-        nps_data(),
+      reactable(
+        shared_nps_data(),
         columns = list(
-          Segment = reactable::colDef(name = "Segment", width = 120),
-          Anteil = reactable::colDef(name = "Anteil (%)", width = 120,
-                                     format = reactable::colFormat(suffix = "%"))
+          Segment = colDef(name = "Segment", width = 120),
+          Anteil = colDef(name = "Anteil (%)", width = 120,
+                          format = colFormat(suffix = "%"))
         ),
         striped = TRUE,
         highlight = TRUE,
@@ -169,7 +147,7 @@ modB_dashboardCardsApp_server <- function(id) {
   })
 }
 
-# # Test Module B independently
+# Dummy App - Module B
 #
 # ui <- page_fluid(
 #   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
@@ -184,8 +162,15 @@ modB_dashboardCardsApp_server <- function(id) {
 # )
 #
 # server <- function(input, output, session) {
-#   modB_dashboardCardsApp_server("testB")
+#   # Simulate shared NPS data
+#   shared_nps_data <- reactive({
+#     data.frame(
+#       Segment = c("Promoters", "Passives", "Detractors"),
+#       Anteil = c(65, 25, 10)
+#     )
+#   })
+#
+#   modB_dashboardCardsApp_server("testB", shared_nps_data)
 # }
 #
 # shinyApp(ui, server)
-
