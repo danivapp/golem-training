@@ -9,7 +9,7 @@
 #'
 #' @noRd
 #'
-#' @importFrom shiny NS tagList
+#' @importFrom shiny NS tagList div selectInput textOutput h5
 modA_dataVisualizationApp_ui <- function(id) {
   ns <- NS(id)
   div(
@@ -34,6 +34,7 @@ modA_dataVisualizationApp_ui <- function(id) {
 #' @param dataset_selection ReactiveVal containing selected dataset
 #' @param current_data Reactive containing raw dataset
 #' @noRd
+#' @importFrom shiny moduleServer observe bindEvent renderText req
 modA_dataVisualizationApp_server <- function(id, dataset_selection, current_data){
   moduleServer(id, function(input, output, session){
 

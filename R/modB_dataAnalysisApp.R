@@ -7,15 +7,16 @@
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
-#'
-#' @importFrom shiny NS tagList
+#' @import bslib
+#' @import shiny
+#' @importFrom DT dataTableOutput
 modB_dataAnalysisApp_ui <- function(id) {
   ns <- NS(id)
 
   card(
     card_header("Grouped Data Table"),
     card_body(
-      DT::dataTableOutput(ns("data_table"))
+      dataTableOutput(ns("data_table"))
     )
   )
 }
@@ -24,6 +25,9 @@ modB_dataAnalysisApp_ui <- function(id) {
 #' dataAnalysis Server Functions
 #' @param dataset_selection Reactive containing selected dataset
 #' @param processed_data Reactive containing processed count data
+#' @noRd
+#' @import shiny
+#' @importFrom DT renderDataTable datatable
 modB_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
   moduleServer(id, function(input, output, session){
     ns <- session$ns

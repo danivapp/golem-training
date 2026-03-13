@@ -11,11 +11,12 @@
 #' @noRd
 #' @import bslib
 #' @import shiny
+#' @import ggplot2
 #'
-#' @importFrom shiny NS tagList
+#' @importFrom tools toTitleCase
 #'
 #' @export
-#'
+#' @noRd
 modA_dataAnalysisApp_ui <- function(id) {
   ns <- NS(id)
 
@@ -69,7 +70,6 @@ modA_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
     output$bar_chart <- renderPlot({
       req(processed_data(), dataset_selection())
 
-      library(ggplot2)
       data <- processed_data()
       dataset_name <- dataset_selection()
 
@@ -82,7 +82,7 @@ modA_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
 
       ggplot(data, aes(x = .data[[x_var]], y = count, fill = .data[[x_var]])) +
         geom_col() +
-        labs(title = paste(tools::toTitleCase(dataset_name), ": Count by",
+        labs(title = paste(toTitleCase(dataset_name), ": Count by",
                            ifelse(dataset_name == "cars", "Manufacturer", "Species")),
              x = NULL, y = "Count") +
         theme_minimal() +

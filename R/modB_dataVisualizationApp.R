@@ -7,8 +7,7 @@
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
-#' @import bslib
-#' @importFrom shiny NS tagList
+#' @import shiny
 modB_dataVisualizationApp_ui <- function(id) {
   ns <- NS(id)
   tagList(
@@ -23,10 +22,10 @@ modB_dataVisualizationApp_ui <- function(id) {
 #' @param dataset_selection ReactiveVal containing selected dataset
 #' @param current_data Reactive containing raw dataset
 #' @noRd
+#' @import shiny
+#' @import ggplot2
 modB_dataVisualizationApp_server <- function(id, dataset_selection, current_data) {
   moduleServer(id, function(input, output, session) {
-
-    library(ggplot2)
 
     # Create scatter plot
     output$scatter_plot <- renderPlot({

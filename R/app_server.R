@@ -6,8 +6,8 @@
 #' @noRd
 app_server <- function(input, output, session) {
 
-  # Load dependencies
-  load_app_dependencies()
+  # # Load dependencies
+  # load_app_dependencies()
 
   # App 1: Basic dropdown
   mod_basicDropdownApp_server("basicDropdownApp_1")
