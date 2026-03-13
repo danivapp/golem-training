@@ -71,16 +71,16 @@ app_ui <- function(request) {
         value = "app4",
         div(
           class = "mt-3",
-          div(
-            class = "mb-3 text-center",
-            actionButton("refresh_dashboard", "Daten aktualisieren",
-                         class = "btn-primary btn-lg")
-          ),
           layout_column_wrap(
             width = 1/2,
             modA_dashboardCardsApp_ui("dashboardA"),
             modB_dashboardCardsApp_ui("dashboardB")
-          )
+          ),
+          div(
+            class = "mt-3 text-center",
+            actionButton("refresh_dashboard", "Daten aktualisieren",
+                         class = "btn-primary btn-lg")
+          ),
         )
       ),
 
@@ -90,16 +90,16 @@ app_ui <- function(request) {
         value = "app5",
         div(
           class = "mt-3",
-          div(
-            class = "mb-3 text-center",
-            actionButton("refresh_interactive", "Daten aktualisieren",
-                         class = "btn-primary btn-lg")
-          ),
           layout_column_wrap(
             width = 1/2,
             modA_dashboardCardsApp_ui("app5_moduleA"),
             modB_dashboardCardsApp_ui("app5_moduleB")
-          )
+          ),
+          div(
+            class = "mt-3 text-center",
+            actionButton("refresh_interactive", "Daten aktualisieren",
+                         class = "btn-primary btn-lg")
+          ),
         )
       )
     )
