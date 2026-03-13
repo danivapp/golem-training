@@ -5,6 +5,6 @@ account: daniva
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 16847642
-bundleId: 11687562
+bundleId: 11703438
 url: https://daniva.shinyapps.io/golem-training-apps/
 version: 1

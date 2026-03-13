@@ -7,7 +7,7 @@
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
-#'
+#' @import bslib
 #' @importFrom shiny NS tagList
 modB_dataVisualizationApp_ui <- function(id) {
   ns <- NS(id)
