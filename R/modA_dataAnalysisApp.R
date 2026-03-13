@@ -46,54 +46,30 @@ modA_dataAnalysisApp_ui <- function(id) {
 
 
 #' dataAnalysis Server Functions
-#'
-#' @noRd
-modA_dataAnalysisApp_server <- function(id){
+#' @param dataset_selection Reactive containing selected dataset
+#' @param processed_data Reactive containing processed count data
+modA_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
-    # Raw Data
-    current_data <- reactive({
-      req(input$dataset_menu)
-
-      switch(input$dataset_menu,
-             "iris" = iris,
-             "cars" = ggplot2::mpg,
-             "penguins" = palmerpenguins::penguins
-      )
-    })
-
-    # Grouped Data - Consistent count format for ALL datasets
-    processed_data <- reactive({
-      req(current_data(), input$dataset_menu)
-
-      library(dplyr)
-      data <- current_data()
-      dataset_name <- input$dataset_menu
-
-      if(dataset_name == "iris") {
-        data |> count(Species, name = "count")
-      } else if(dataset_name == "cars") {
-        data |> count(manufacturer, name = "count")
-      } else if(dataset_name == "penguins") {
-        data |>
-          filter(!is.na(species)) |>
-          count(species, name = "count")
-      }
-    })
+    # Update shared reactive when local input changes
+    observe({
+      dataset_selection(input$dataset_menu)
+    }) |> bindEvent(input$dataset_menu)
 
     # Dataset info
     output$dataset_info <- renderText({
-      generate_data_text(input$dataset_menu)
+      req(dataset_selection())
+      generate_data_text(dataset_selection())
     })
 
     # Create bar chart
     output$bar_chart <- renderPlot({
-      req(processed_data(), input$dataset_menu)
+      req(processed_data(), dataset_selection())
 
       library(ggplot2)
       data <- processed_data()
-      dataset_name <- input$dataset_menu
+      dataset_name <- dataset_selection()
 
       # Get the grouping variable name
       x_var <- switch(dataset_name,
@@ -114,12 +90,6 @@ modA_dataAnalysisApp_server <- function(id){
           legend.position = "none"
         )
     })
-
-    return(list(
-      dataset_selection = reactive({input$dataset_menu}),
-      processed_data = processed_data,
-      raw_data = current_data
-    ))
   })
 }
 

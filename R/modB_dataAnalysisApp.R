@@ -22,18 +22,18 @@ modB_dataAnalysisApp_ui <- function(id) {
 
 
 #' dataAnalysis Server Functions
-#'
-#' @noRd
-modB_dataAnalysisApp_server <- function(id, moduleA_data){
+#' @param dataset_selection Reactive containing selected dataset
+#' @param processed_data Reactive containing processed count data
+modB_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
     # Render data table
     output$data_table <- DT::renderDataTable({
-      req(moduleA_data$processed_data())
+      req(processed_data(), dataset_selection())
 
-      data <- moduleA_data$processed_data()
-      dataset_name <- moduleA_data$dataset_selection()
+      data <- processed_data()
+      dataset_name <- dataset_selection()
 
       DT::datatable(
         data,

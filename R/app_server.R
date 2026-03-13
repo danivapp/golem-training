@@ -17,8 +17,17 @@ app_server <- function(input, output, session) {
   modB_dataVisualizationApp_server("moduleB", selected_dataset_app2)
 
   # App 3: Data Analysis
-  dataAnalysis_results <- modA_dataAnalysisApp_server("barChartApp")
-  modB_dataAnalysisApp_server("dataAnalysisApp", dataAnalysis_results)
+  dataset_selection <- reactiveVal("iris")
+
+  processed_data <- reactive({
+    req(dataset_selection())
+    dataset_name <- dataset_selection()
+    raw_data <- get_dataset_by_name(dataset_name)
+    generate_processed_counts(dataset_selection(), raw_data)
+  })
+
+  modA_dataAnalysisApp_server("barChartApp", dataset_selection, processed_data)
+  modB_dataAnalysisApp_server("dataAnalysisApp", dataset_selection, processed_data)
 
   # App 4: Dashboard Cards
   modA_dashboardCardsApp_server("dashboardA")
