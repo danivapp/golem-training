@@ -15,7 +15,3 @@
 # cat("✅ App deployed successfully!\\n")
 # cat("🌐 Live at: https://daniva.shinyapps.io/golem-training-apps\\n")
 # ', file = "deploy.R")
-#
-#
-#
-#

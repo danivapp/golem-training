@@ -32,7 +32,7 @@ modA_dashboardCardsApp_ui <- function(id) {
       "Gesamtzufriedenheit"
     ),
     card_body(
-      reactableOutput(ns("satisfaction_table"))
+      reactable::reactableOutput(ns("satisfaction_table"))
     )
   )
 }
@@ -49,11 +49,11 @@ modA_dashboardCardsApp_server <- function(id, shared_satisfaction_data){
     output$satisfaction_table <- renderReactable({
       req(shared_satisfaction_data())
 
-      reactable(
+      reactable::reactable(
         shared_satisfaction_data(),
         columns = list(
-          Kategorie = colDef(name = "Kategorie", width = 120),
-          Bewertung = colDef(name = "Bewertung", width = 120,
+          Kategorie = reactable::colDef(name = "Kategorie", width = 120),
+          Bewertung = reactable::colDef(name = "Bewertung", width = 120,
                              format = colFormat(digits = 1))
         ),
         striped = TRUE,
@@ -71,7 +71,6 @@ modA_dashboardCardsApp_server <- function(id, shared_satisfaction_data){
 # ui <- page_fluid(
 #   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
 #   titlePanel("Test: Module A - Gesamtzufriedenheit"),
-#   br(),
 #
 #   # Test Module A in a container
 #   div(
@@ -114,7 +113,7 @@ modB_dashboardCardsApp_ui <- function(id) {
       "NPS"
     ),
     card_body(
-      reactableOutput(ns("nps_table"))
+      reactable::reactableOutput(ns("nps_table"))
     )
   )
 }
@@ -131,11 +130,11 @@ modB_dashboardCardsApp_server <- function(id, shared_nps_data) {
     output$nps_table <- renderReactable({
       req(shared_nps_data())
 
-      reactable(
+      reactable::reactable(
         shared_nps_data(),
         columns = list(
-          Segment = colDef(name = "Segment", width = 120),
-          Anteil = colDef(name = "Anteil (%)", width = 120,
+          Segment = reactable::colDef(name = "Segment", width = 120),
+          Anteil = reactable::colDef(name = "Anteil (%)", width = 120,
                           format = colFormat(suffix = "%"))
         ),
         striped = TRUE,
@@ -152,7 +151,6 @@ modB_dashboardCardsApp_server <- function(id, shared_nps_data) {
 # ui <- page_fluid(
 #   theme = bslib::bs_theme(version = 5),  # Enable Bootstrap 5 for cards
 #   titlePanel("Test: Module B - NPS"),
-#   br(),
 #
 #   # Test Module B in a container
 #   div(

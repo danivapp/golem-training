@@ -33,7 +33,6 @@ modA_dataAnalysisApp_ui <- function(id) {
         ),
         div(
           class = "mt-3",
-          h4("Selected Dataset:"),
           textOutput(ns("dataset_info"))
         )
       )

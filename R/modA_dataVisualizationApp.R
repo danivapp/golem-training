@@ -24,7 +24,6 @@ modA_dataVisualizationApp_ui <- function(id) {
     ),
     div(
       class = "col-12",
-      h5("Selection Info:"),
       textOutput(ns("selected_text"))
     )
   )

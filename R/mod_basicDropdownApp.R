@@ -20,7 +20,6 @@ mod_basicDropdownApp_ui <- function(id) {
         "Ice Cubes" = "on diet"
       )
     ),
-    h3("You are:"),
     textOutput(ns("selected_text"))
   )
 }
