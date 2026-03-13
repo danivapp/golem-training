@@ -20,29 +20,20 @@ modB_dataVisualizationApp_ui <- function(id) {
 
 #' Module B: Scatter Plot Server Function
 #'
-#' @param selected_dataset Reactive value from Module A
+#' @param dataset_selection ReactiveVal containing selected dataset
+#' @param current_data Reactive containing raw dataset
 #' @noRd
-modB_dataVisualizationApp_server <- function(id, selected_dataset) {
+modB_dataVisualizationApp_server <- function(id, dataset_selection, current_data) {
   moduleServer(id, function(input, output, session) {
 
     library(ggplot2)
 
-    # Get current dataset based on Module A selection
-    current_data <- reactive({req(selected_dataset())
-
-      switch(selected_dataset(),
-             "iris" = iris,
-             "cars" = cars,
-             "penguins" = palmerpenguins::penguins
-             )
-    })
-
     # Create scatter plot
     output$scatter_plot <- renderPlot({
-      req(current_data())
+      req(current_data(), dataset_selection())
 
       data <- current_data()
-      dataset_name <- selected_dataset()
+      dataset_name <- dataset_selection()
 
       if(dataset_name == "iris") {
         # Iris: Sepal Length vs Sepal Width
@@ -89,20 +80,28 @@ modB_dataVisualizationApp_server <- function(id, selected_dataset) {
         "penguins" = "Bill length vs depth measurements, by penguin species."
       )
 
-      descriptions[[selected_dataset()]]
+      descriptions[[dataset_selection()]]
     })
   })
 }
 
-# # Dummy App Module B
-# library(golem)
-#
-# ui<- bslib::page_fluid(
+# # # Dummy App Module B
+# ui <- fluidPage(
 #   modB_dataVisualizationApp_ui("test")
 # )
 #
 # server <- function(input, output, session) {
-#   modB_dataVisualizationApp_server("test", selected_dataset = reactive("iris"))
+#   # Shared reactives
+#   dataset_selection <- reactiveVal("iris")
+#
+#   current_data <- reactive({
+#     req(dataset_selection())
+#     get_dataset_by_name(dataset_selection())  # Use helper function
+#   })
+#
+#   # Test different datasets:
+#   dataset_selection("penguins")  # Change to "iris" or "cars" for testing
+#   modB_dataVisualizationApp_server("test", dataset_selection, current_data)
 # }
 #
 # shinyApp(ui, server)

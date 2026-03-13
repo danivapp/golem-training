@@ -13,8 +13,18 @@ app_server <- function(input, output, session) {
   mod_basicDropdownApp_server("basicDropdownApp_1")
 
   # App 2: Data visualization modules
-  selected_dataset_app2 <- modA_dataVisualizationApp_server("moduleA")
-  modB_dataVisualizationApp_server("moduleB", selected_dataset_app2)
+  dataset_selection_app2 <- reactiveVal("iris")
+
+  current_data_app2 <- reactive({
+    req(dataset_selection_app2())
+    switch(dataset_selection_app2(),
+           "iris" = iris,
+           "cars" = cars,
+           "penguins" = palmerpenguins::penguins)
+  })
+
+  modA_dataVisualizationApp_server("moduleA", dataset_selection_app2, current_data_app2)
+  modB_dataVisualizationApp_server("moduleB", dataset_selection_app2, current_data_app2)
 
   # App 3: Data Analysis
   dataset_selection <- reactiveVal("iris")
@@ -23,7 +33,7 @@ app_server <- function(input, output, session) {
     req(dataset_selection())
     dataset_name <- dataset_selection()
     raw_data <- get_dataset_by_name(dataset_name)
-    generate_processed_counts(dataset_selection(), raw_data)
+    generate_processed_counts(dataset_name, raw_data)
   })
 
   modA_dataAnalysisApp_server("barChartApp", dataset_selection, processed_data)

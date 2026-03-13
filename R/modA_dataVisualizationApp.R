@@ -31,20 +31,21 @@ modA_dataVisualizationApp_ui <- function(id) {
 }
 
 #' dataVisualizationApp Server Function
-#'
+#' @param dataset_selection ReactiveVal containing selected dataset
+#' @param current_data Reactive containing raw dataset
 #' @noRd
-modA_dataVisualizationApp_server <- function(id){
+modA_dataVisualizationApp_server <- function(id, dataset_selection, current_data){
   moduleServer(id, function(input, output, session){
+
+    observe({
+      dataset_selection(input$dataset_menu)
+    }) |> bindEvent(input$dataset_menu)
 
     # Create reactive output that shows selected dataset info
     output$selected_text <- renderText({
-      generate_data_text(input$dataset_menu)
+      req(dataset_selection())
+      generate_data_text(dataset_selection())
     })
-
-    # return, as this will be used in module B of the app.
-    return(reactive({
-      input$dataset_menu
-    }))
   })
 }
 
