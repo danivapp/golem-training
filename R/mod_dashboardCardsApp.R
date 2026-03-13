@@ -98,7 +98,7 @@ modA_dashboardCardsApp_server <- function(id){
 }
 
 
-## Test Module B independently
+## Test Module A independently
 # library(golem)
 # library(shiny)
 # library(bslib)

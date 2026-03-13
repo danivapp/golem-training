@@ -39,11 +39,11 @@ app_server <- function(input, output, session) {
   modA_dataAnalysisApp_server("barChartApp", dataset_selection, processed_data)
   modB_dataAnalysisApp_server("dataAnalysisApp", dataset_selection, processed_data)
 
-  # App 4: Dashboard Cards
-  modA_dashboardCardsApp_server("dashboardA")
-  modB_dashboardCardsApp_server("dashboardB")
-
-  # App 5: Interactive Dashboard
-  module_states_app5 <- modA_interactiveDashboardApp_server("app5_moduleA")
-  modB_interactiveDashboardApp_server("app5_moduleB", module_states_app5)
+  # # App 4: Dashboard Cards
+  # modA_dashboardCardsApp_server("dashboardA")
+  # modB_dashboardCardsApp_server("dashboardB")
+  #
+  # # App 5: Interactive Dashboard
+  # module_states_app5 <- modA_interactiveDashboardApp_server("app5_moduleA")
+  # modB_interactiveDashboardApp_server("app5_moduleB", module_states_app5)
 }

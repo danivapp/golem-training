@@ -63,7 +63,7 @@ modA_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
     # Dataset info
     output$dataset_info <- renderText({
       req(dataset_selection())
-      generate_data_text(dataset_selection())
+      generate_data_text(dataset_selection(), use_mpg = TRUE)
     })
 
     # Create bar chart

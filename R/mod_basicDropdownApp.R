@@ -29,6 +29,7 @@ mod_basicDropdownApp_ui <- function(id) {
 #' basicDropdownApp Server Functions
 #'
 #' @noRd
+#' @import shiny
 mod_basicDropdownApp_server <- function(id){
   moduleServer(id, function(input, output, session){
 

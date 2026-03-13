@@ -1,15 +1,13 @@
-#' generate_data_text
-#'
-#' @description A fct function
-#'
-#' @return The return value, if any, from executing the function.
-#'
+#' Generate data text description
+#' @param dataset_menu Character string with dataset name
+#' @param use_mpg Logical, if TRUE uses ggplot2::mpg for cars, if FALSE uses mtcars
+#' @return Character string with dataset description
 #' @noRd
-generate_data_text <- function(dataset_menu) {
+generate_data_text <- function(dataset_menu, use_mpg = TRUE) {
 
   dataset <- switch(dataset_menu,
                     "iris" = iris,
-                    "cars" = mtcars,
+                    "cars" = if(use_mpg) ggplot2::mpg else mtcars,
                     "penguins" = palmerpenguins::penguins,
   )
 
@@ -51,6 +49,7 @@ get_dataset_by_name <- function(dataset_name) {
 #' @param data data.frame
 #' @return data.frame with count column
 #' @noRd
+#' @importFrom dplyr count filter
 generate_processed_counts <- function(dataset_name, data) {
   library(dplyr)
 

@@ -45,7 +45,7 @@ modA_dataVisualizationApp_server <- function(id, dataset_selection, current_data
     # Create reactive output that shows selected dataset info
     output$selected_text <- renderText({
       req(dataset_selection())
-      generate_data_text(dataset_selection())
+      generate_data_text(dataset_selection(), use_mpg = FALSE)
     })
   })
 }
