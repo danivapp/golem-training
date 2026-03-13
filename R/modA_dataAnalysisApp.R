@@ -23,8 +23,10 @@ modA_dataAnalysisApp_ui <- function(id) {
   # Simple layout - let the main app handle the positioning
   tagList(
     card(
+      class = "mb-4",
       card_header("Dataset Selection"),
       card_body(
+        class = "p-5",
         selectInput(
           ns("dataset_menu"),
           "Select a dataset:",
@@ -32,7 +34,7 @@ modA_dataAnalysisApp_ui <- function(id) {
           selected = "iris"
         ),
         div(
-          class = "mt-3",
+          class = "mt-4",
           textOutput(ns("dataset_info"))
         )
       )
