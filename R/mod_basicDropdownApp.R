@@ -45,18 +45,18 @@ mod_basicDropdownApp_server <- function(id){
 # mod_basicDropdownApp_server("basicDropdownApp_1")
 
 
-# Dummy App
-library(shiny)
-
-ui <- bslib::page_fluid(
-  mod_basicDropdownApp_ui("basicDropdownApp_1")
-)
-
-server <- function(input, output, session){
-  mod_basicDropdownApp_server("basicDropdownApp_1")
-}
-
-shinyApp(ui, server)
+# # Dummy App
+# library(shiny)
+#
+# ui <- bslib::page_fluid(
+#   mod_basicDropdownApp_ui("basicDropdownApp_1")
+# )
+#
+# server <- function(input, output, session){
+#   mod_basicDropdownApp_server("basicDropdownApp_1")
+# }
+#
+# shinyApp(ui, server)
 
 
 

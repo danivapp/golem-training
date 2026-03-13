@@ -58,14 +58,9 @@ app_ui <- function(request) {
         div(
           class = "mt-3",
           layout_column_wrap(
-            width = 1/2,
+            width = 1/2,  # This keeps modules side by side
             modA_dataAnalysisApp_ui("barChartApp"),
-            card(
-              card_header("Data Analysis"),
-              card_body(
-                modB_dataAnalysisApp_ui("dataAnalysisApp")
-              )
-            )
+            modB_dataAnalysisApp_ui("dataAnalysisApp")
           )
         )
       ),

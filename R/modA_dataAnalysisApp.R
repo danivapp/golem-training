@@ -8,33 +8,38 @@
 #' @param id,input,output,session Internal parameters for {shiny}.
 #'
 #' @noRd
+#' @import bslib
 #'
 #' @importFrom shiny NS tagList
+#'
+#' @export
+#'
 modA_dataAnalysisApp_ui <- function(id) {
-  ns <- NS(id) # namespace System to prevent ID conflicts
+  ns <- NS(id)
+
+  # Simple layout - let the main app handle the positioning
   tagList(
-    fluidRow(
-      # Left Column
-      column(4,
-             wellPanel(
-               selectInput(
-                 inputId = ns("dataset_menu"),
-                 label = "Select a dataset:",
-                 choices = c( "iris","cars","penguins"),
-                 selected = "iris"),
-               br(),
-               h4("Selected Dataset:"),
-               textOutput(ns("dataset_info"))
-             )
-      ),
-
-
-      # Right Column
-      column(8,
-             wellPanel(
-               h4("Bar Chart"),
-               plotOutput(ns("bar_chart"), height = "400px")
-             ))
+    card(
+      card_header("Dataset Selection"),
+      card_body(
+        selectInput(
+          ns("dataset_menu"),
+          "Select a dataset:",
+          choices = c("iris", "cars", "penguins"),
+          selected = "iris"
+        ),
+        div(
+          class = "mt-3",
+          h4("Selected Dataset:"),
+          textOutput(ns("dataset_info"))
+        )
+      )
+    ),
+    card(
+      card_header("Bar Chart"),
+      card_body(
+        plotOutput(ns("bar_chart"), height = "400px")
+      )
     )
   )
 }
@@ -47,9 +52,7 @@ modA_dataAnalysisApp_server <- function(id){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
-
-
-    # Get current dataset
+    # Raw Data
     current_data <- reactive({
       req(input$dataset_menu)
 
@@ -60,70 +63,76 @@ modA_dataAnalysisApp_server <- function(id){
       )
     })
 
-    # Dataset info
-    output$dataset_info <- renderText({
-      data <- current_data()
-      paste("Dataset:", input$dataset_menu, "- Rows:", nrow(data), "- Columns:", ncol(data))
-    })
+    # Grouped Data - Consistent count format for ALL datasets
+    processed_data <- reactive({
+      req(current_data(), input$dataset_menu)
 
-    # Create bar chart
-    output$bar_chart <- renderPlot({
-      req(current_data())
-
+      library(dplyr)
       data <- current_data()
       dataset_name <- input$dataset_menu
 
       if(dataset_name == "iris") {
-        # Count by Species
-        species_counts <- table(data$Species)
-        barplot(species_counts,
-                main = "Iris: Number of Observations by Species",
-                xlab = "Species",
-                ylab = "Count",
-                col = c("red", "green", "blue"),
-                las = 1)
-
+        data |> count(Species, name = "count")
       } else if(dataset_name == "cars") {
-        # Count by Manufacturer
-        manufacturer_counts <- table(data$manufacturer)
-        barplot(manufacturer_counts,
-                main = "MPG: Number of Cars by Manufacturer",
-                xlab = "Manufacturer",
-                ylab = "Count",
-                col = rainbow(length(manufacturer_counts)),
-                las = 2,  # Rotate labels
-                cex.names = 0.7)  # Smaller text for readability
-
+        data |> count(manufacturer, name = "count")
       } else if(dataset_name == "penguins") {
-        # Count by Species (remove NAs)
-        data_clean <- data[!is.na(data$species), ]
-        species_counts <- table(data_clean$species)
-        barplot(species_counts,
-                main = "Penguins: Number of Observations by Species",
-                xlab = "Species",
-                ylab = "Count",
-                col = c("orange", "purple", "cyan"),
-                las = 1)
+        data |>
+          filter(!is.na(species)) |>
+          count(species, name = "count")
       }
     })
 
-    # Return selected dataset for potential Module B
-    return(reactive({
-      input$dataset_menu
-    }))
+    # Dataset info
+    output$dataset_info <- renderText({
+      generate_data_text(input$dataset_menu)
+    })
+
+    # Create bar chart
+    output$bar_chart <- renderPlot({
+      req(processed_data(), input$dataset_menu)
+
+      library(ggplot2)
+      data <- processed_data()
+      dataset_name <- input$dataset_menu
+
+      # Get the grouping variable name
+      x_var <- switch(dataset_name,
+                      "iris" = "Species",
+                      "cars" = "manufacturer",
+                      "penguins" = "species"
+      )
+
+      ggplot(data, aes(x = .data[[x_var]], y = count, fill = .data[[x_var]])) +
+        geom_col() +
+        labs(title = paste(tools::toTitleCase(dataset_name), ": Count by",
+                           ifelse(dataset_name == "cars", "Manufacturer", "Species")),
+             x = NULL, y = "Count") +
+        theme_minimal() +
+        theme(
+          plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          legend.position = "none"
+        )
+    })
+
+    return(list(
+      dataset_selection = reactive({input$dataset_menu}),
+      processed_data = processed_data,
+      raw_data = current_data
+    ))
   })
 }
 
-# library(golem)
-# library(shiny)
-#
-# ui <- fluidPage(
-#   titlePanel("Test: Bar Chart Module"),
-#   modA_dataAnalysis_ui("test")
-# )
-#
-# server <- function(input, output, session) {
-#   modA_dataAnalysis_server("test")
-# }
-#
-# shinyApp(ui, server)
+
+# Dummy App for Module A
+
+ui <- fluidPage(
+  titlePanel("Test: Bar Chart Module"),
+  modA_dataAnalysisApp_ui("test")
+)
+
+server <- function(input, output, session) {
+  modA_dataAnalysisApp_server("test")
+}
+
+shinyApp(ui, server)

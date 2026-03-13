@@ -10,7 +10,7 @@
 #'
 #' @importFrom shiny NS tagList
 modB_dataAnalysisApp_ui <- function(id) {
-  ns <- NS(id) # namespace System to prevent ID consflicts
+  ns <- NS(id)
   tagList(
     h3("Data Table"),
     DT::dataTableOutput(ns("data_table"))
@@ -21,59 +21,70 @@ modB_dataAnalysisApp_ui <- function(id) {
 #' dataAnalysis Server Functions
 #'
 #' @noRd
-modB_dataAnalysisApp_server <- function(id, selected_dataset){
+modB_dataAnalysisApp_server <- function(id, moduleA_data){
   moduleServer(id, function(input, output, session){
     ns <- session$ns
 
-    # Get current dataset based on Module A selection
-    current_data <- reactive({
-      req(selected_dataset())
-
-      switch(selected_dataset(),
-             "iris" = iris,
-             "cars" = ggplot2::mpg,
-             "penguins" = palmerpenguins::penguins
-      )
-    })
-
     # Render data table
     output$data_table <- DT::renderDataTable({
-      req(current_data())
+      req(moduleA_data$processed_data())
+
+      data <- moduleA_data$processed_data()
+      dataset_name <- moduleA_data$dataset_selection()
 
       DT::datatable(
-        current_data(),
-        options = list(
-          pageLength = 15,
-          scrollX = TRUE,
-          scrollY = "400px",
-          searching = TRUE,
-          ordering = TRUE
-        ),
-        caption = paste("Dataset:", selected_dataset()),
-        filter = 'top'  # Add column filters
+        data,
+        caption = paste("Dataset:", dataset_name)
       )
     })
-
   })
 }
 
 
-# # # Test Module B independently
-# library(golem)
-# library(shiny)
-# library(DT)
-#
-#
-# ui <- fluidPage(
-#   titlePanel("Test: Table Module B"),
-#   modB_dataAnalysisApp_ui("test")
-# )
-#
-# server <- function(input, output, session) {
-#   # Simulate Module A output
-#   simulated_selection <- reactive("cars")
-#   modB_dataAnalysisApp_server("test", simulated_selection)
-# }
-#
-# shinyApp(ui, server)
+# Dummy App for Module
+
+ui <- fluidPage(
+  titlePanel("Test: Table Module B"),
+  modB_dataAnalysisApp_ui("test")
+)
+
+server <- function(input, output, session) {
+  # Simulate Module A output with correct structure for all datasets
+
+  # For IRIS (no processing - raw data)
+  simulated_moduleA_iris <- list(
+    dataset_selection = reactive("iris"),
+    processed_data = reactive({
+      library(dplyr)
+      iris |> count(Species, name = "count")
+    })
+  )
+
+  # For CARS (processed - manufacturer counts)
+  simulated_moduleA_cars <- list(
+    dataset_selection = reactive("cars"),
+    processed_data = reactive({
+      library(dplyr)
+      ggplot2::mpg |> count(manufacturer, name = "count")
+    })
+  )
+
+  # For PENGUINS (processed - filtered data, no missing species)
+  simulated_moduleA_penguins <- list(
+    dataset_selection = reactive("penguins"),
+    processed_data = reactive({
+      library(dplyr)
+      palmerpenguins::penguins |>
+        filter(!is.na(species)) |>
+        count(species, name = "count")
+    })
+  )
+
+  # Use one of them (change as needed for testing):
+  # modB_dataAnalysisApp_server("test", simulated_moduleA_cars)  # Test with cars
+  # modB_dataAnalysisApp_server("test", simulated_moduleA_iris)     # Test with iris
+  modB_dataAnalysisApp_server("test", simulated_moduleA_penguins) # Test with penguins
+}
+
+shinyApp(ui, server)
 
