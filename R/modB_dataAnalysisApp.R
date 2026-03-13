@@ -45,48 +45,43 @@ modB_dataAnalysisApp_server <- function(id, dataset_selection, processed_data){
 
 
 # # Dummy App for Module
-#
+# # Dummy App for Module B - Updated for shared reactives approach
 # ui <- fluidPage(
 #   titlePanel("Test: Table Module B"),
 #   modB_dataAnalysisApp_ui("test")
 # )
 #
 # server <- function(input, output, session) {
-#   # Simulate Module A output with correct structure for all datasets
 #
-#   # For IRIS (no processing - raw data)
-#   simulated_moduleA_iris <- list(
-#     dataset_selection = reactive("iris"),
-#     processed_data = reactive({
-#       library(dplyr)
-#       iris |> count(Species, name = "count")
-#     })
-#   )
 #
-#   # For CARS (processed - manufacturer counts)
-#   simulated_moduleA_cars <- list(
-#     dataset_selection = reactive("cars"),
-#     processed_data = reactive({
-#       library(dplyr)
-#       ggplot2::mpg |> count(manufacturer, name = "count")
-#     })
-#   )
 #
-#   # For PENGUINS (processed - filtered data, no missing species)
-#   simulated_moduleA_penguins <- list(
-#     dataset_selection = reactive("penguins"),
-#     processed_data = reactive({
-#       library(dplyr)
-#       palmerpenguins::penguins |>
-#         filter(!is.na(species)) |>
-#         count(species, name = "count")
-#     })
-#   )
+#   dataset_selection <- reactiveVal("iris")  #
 #
-#   # Use one of them (change as needed for testing):
-#   # modB_dataAnalysisApp_server("test", simulated_moduleA_cars)  # Test with cars
-#   # modB_dataAnalysisApp_server("test", simulated_moduleA_iris)     # Test with iris
-#   modB_dataAnalysisApp_server("test", simulated_moduleA_penguins) # Test with penguins
+#   # Shared processed data (reactive)
+#   processed_data <- reactive({
+#     req(dataset_selection())
+#     dataset_name <- dataset_selection()
+#
+#     # Simulate the same processing as in app_server.R
+#     raw_data <- switch(dataset_name,
+#                        "iris" = iris,
+#                        "cars" = ggplot2::mpg,
+#                        "penguins" = palmerpenguins::penguins
+#     )
+#
+#     library(dplyr)
+#     switch(dataset_name,
+#            "iris" = raw_data |> count(Species, name = "count"),
+#            "cars" = raw_data |> count(manufacturer, name = "count"),
+#            "penguins" = raw_data |> filter(!is.na(species)) |> count(species, name = "count")
+#     )
+#   })
+#
+#   dataset_selection("iris")      # Shows 3 species counts
+#   # dataset_selection("cars")    # Shows ~15 manufacturer counts
+#   # dataset_selection("penguins") # Shows 3 species counts
+#
+#   modB_dataAnalysisApp_server("test", dataset_selection, processed_data)
 # }
 #
 # shinyApp(ui, server)
